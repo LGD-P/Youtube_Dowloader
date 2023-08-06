@@ -123,17 +123,6 @@ class YoutubeDL:
         path = filedialog.askdirectory()
         return YouTube(self.entry_1.get()).streams.get_audio_only().download(path)
 
-    def select_path_and_download_video(self):
-        """This function allow user to select a path from explorer
-        then download Youtube link in chosen path
-
-        Returns:
-            .mp4: Audio from youtube link as .mp4
-        """
-        path = filedialog.askdirectory()
-        return YouTube(self.entry_1.get()).streams.filter(progressive=True)\
-            .get_highest_resolution().download(path)
-
     def download_from_list_audio(self):
         """This function allow user to download audio.mp4 from a list of link
         register in text document
@@ -149,6 +138,17 @@ class YoutubeDL:
                 print(url)
                 YouTube(url).streams.get_audio_only().download(
                     path_to_downdload)
+
+    def select_path_and_download_video(self):
+        """This function allow user to select a path from explorer
+        then download Youtube link in chosen path
+
+        Returns:
+            .mp4: Audio from youtube link as .mp4
+        """
+        path = filedialog.askdirectory()
+        return YouTube(self.entry_1.get()).streams.filter(progressive=True)\
+            .get_highest_resolution().download(path)
 
     def download_from_list_video(self):
         """This function allow user to download audio.mp4 from a list of link
@@ -170,10 +170,16 @@ class YoutubeDL:
         return self.assets_path / Path(path)
 
     def button_1_callback(self):
-        return self.select_path_and_download_video()
+        if self.current_button_3_state == self.audio:
+            return self.select_path_and_download_audio()
+        else:
+            return self.select_path_and_download_video()
 
     def button_2_callback(self):
-        return self.download_from_list_video()
+        if self.current_button_3_state == self.audio:
+            return self.download_from_list_audio()
+        else:
+            return self.download_from_list_video()
 
     def button_3_callback(self):
         if self.current_button_3_state == self.audio:
