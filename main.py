@@ -123,6 +123,17 @@ class YoutubeDL:
         path = filedialog.askdirectory()
         return YouTube(self.entry_1.get()).streams.get_audio_only().download(path)
 
+    def select_path_and_download_video(self):
+        """This function allow user to select a path from explorer
+        then download Youtube link in chosen path
+
+        Returns:
+            .mp4: Audio from youtube link as .mp4
+        """
+        path = filedialog.askdirectory()
+        return YouTube(self.entry_1.get()).streams.filter(progressive=True)\
+            .get_highest_resolution().download(path)
+
     def download_from_list_audio(self):
         """This function allow user to download audio.mp4 from a list of link
         register in text document
@@ -139,14 +150,30 @@ class YoutubeDL:
                 YouTube(url).streams.get_audio_only().download(
                     path_to_downdload)
 
+    def download_from_list_video(self):
+        """This function allow user to download audio.mp4 from a list of link
+        register in text document
+        """
+        path = filedialog.askopenfilename()
+        first_list = []
+        with open(path, "r", encoding='utf-8') as f:
+            for element in f:
+                first_list.append(element.strip())
+                filtered_list = list(filter(None, first_list))
+            path_to_downdload = filedialog.askdirectory()
+            for url in filtered_list:
+                print(url)
+                YouTube(url).streams.filter(progressive=True).get_highest_resolution().download(
+                    path_to_downdload)
+
     def relative_to_assets(self, path: str) -> Path:
         return self.assets_path / Path(path)
 
     def button_1_callback(self):
-        return self.select_path_and_download_audio()
+        return self.select_path_and_download_video()
 
     def button_2_callback(self):
-        return self.download_from_list_audio()
+        return self.download_from_list_video()
 
     def button_3_callback(self):
         if self.current_button_3_state == self.audio:
