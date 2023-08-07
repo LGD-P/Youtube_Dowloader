@@ -9,7 +9,12 @@ _This project is an improvment of an older, one Youtube_Playlist_Downloader_
 - It's running with Python 3.11 using Poetry package manager
 
 <p align='center'>
-    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original-wordmark.svg" width=40/> <img src="https://python-poetry.org/images/logo-origami.svg" width=30/>
+    <a href="https://www.python.org/downloads/release/python-3110/">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original-wordmark.svg" width=40/> 
+    </a>
+    <a href='https://python-poetry.org/'>
+        <img src="https://python-poetry.org/images/logo-origami.svg" width=30/>
+    </a>
  </p>
 
 ## Graphic improvement:
@@ -27,7 +32,7 @@ _This project is an improvment of an older, one Youtube_Playlist_Downloader_
 <h3 align=center>After<h3>
 
 <p align='center'>
-    <img src="assets\frame0\audio_look.png" width=250>
+    <img src="assets\frame0\audio_look.png" width=250 >
     <img src="assets\frame0\video_look.png" width=250>
 </p>
 
