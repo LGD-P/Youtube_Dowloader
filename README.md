@@ -31,7 +31,7 @@ _This project is an improvment of an older, one Youtube_Playlist_Downloader_
     <img src="assets\frame0\video_look.png" width=250>
 </p>
 
-## New feature:
+## New features:
 
 - Video ! ==> Possibility to switch to download audio or video.
 - Youtube lists are now supported .
