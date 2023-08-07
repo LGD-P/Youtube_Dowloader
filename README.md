@@ -46,19 +46,13 @@ _This project is an improvment of an older, one Youtube_Playlist_Downloader_
 
     pip install poetry
 
-### Initialize Poetry in your project:
-
-    peotry init
-
-\*follow instructions
-
 ### Active virtual environnement in your project:
 
     poetry shell
 
 ### Install dependencies:
 
-    poetry add
+    poetry install
 
 ### Run project:
 
