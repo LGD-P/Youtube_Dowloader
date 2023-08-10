@@ -1,6 +1,8 @@
 from pytube import YouTube, Playlist
 from tkinter import filedialog
 
+from data_view import DataInfo
+
 
 class YoutubeDlModel:
     PLAYLIST_TAG = "https://www.youtube.com/playlist?list="
@@ -10,18 +12,22 @@ class YoutubeDlModel:
         """
         Choose the right audio method based on a youtube playlist or simple URL
         """
+
         if YoutubeDlModel.PLAYLIST_TAG in link:
-            print("C'est une playlist:")
+            print("Audio: C'est une playlist:")
             print(link)
             for audio in Playlist(link).videos:
                 print(audio.embed_url)
-                audio.streams.get_audio_only().download(output_path=output_path)
+                dl = DataInfo()
+                dl.add_single_data_in_table(audio)
+                # audio.streams.get_audio_only().download(output_path=output_path)
 
         else:
-            print("C'est un simple lien")
+            print("Audio: C'est un simple lien")
             print(link)
-            YouTube(link).streams.get_audio_only().download(
-                output_path=output_path)
+            dl = DataInfo()
+            # YouTube(link).streams.get_audio_only().download(output_path=output_path)
+            dl.add_single_audio_data_in_table(link)
 
     @staticmethod
     def select_path_and_download_audio(link):
@@ -59,7 +65,7 @@ class YoutubeDlModel:
         Choose the right audio method based on a youtube playlist or simple URL
         """
         if YoutubeDlModel.PLAYLIST_TAG in link:
-            print("C'est une playlist:")
+            print("Video: C'est une playlist:")
             print(link)
             for video in Playlist(link).videos:
                 print(video.embed_url)
@@ -67,10 +73,11 @@ class YoutubeDlModel:
                     'resolution').desc().first().download(output_path=output_path)
 
         else:
-            print("C'est un simple lien")
+            print("Video: C'est un simple lien")
             print(link)
-            YouTube(link).streams.filter(progressive=True).order_by(
-                'resolution').desc().first().download(output_path=output_path)
+            dl = DataInfo()
+            # YouTube(link).streams.filter(progressive=True).order_by('resolution').desc().first().download(output_path=output_path)
+            dl.add_single_video_data_in_table(link)
 
     @ staticmethod
     def select_path_and_download_video(link):
