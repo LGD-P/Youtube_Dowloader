@@ -20,9 +20,6 @@ class YoutubeDlGui:
         self.window.configure(bg="#FFFFFF")
         self.icon_path = "assets/frame0/icon.ico"
         self.window.iconbitmap(self.icon_path)
-        
-
-
 
         self.canvas = Canvas(
             self.window,

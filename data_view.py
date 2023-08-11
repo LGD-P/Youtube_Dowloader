@@ -4,14 +4,6 @@ import ttkbootstrap as Tkb
 import time
 from pytube import YouTube
 
-# Données du tableau
-DATA = [
-    {"N°": 1, "Title": "Video 1", "Size": 100, "Duration": 10, "Completed": True},
-    {"N°": 2, "Title": "Video 2", "Size": 200, "Duration": 20, "Completed": True},
-    {"N°": 3, "Title": "Video 3", "Size": 300, "Duration": 30, "Completed": False},
-    {"N°": 4, "Title": "Video 4", "Size": 400, "Duration": 40, "Completed": True},
-    {"N°": 5, "Title": "Video 5", "Size": 500, "Duration": 50, "Completed": False}
-]
 
 URL = "https://www.youtube.com/watch?v=L-iepu3EtyE"
 PLAYLIST = "https://www.youtube.com/playlist?list=PL-tdP6nrpQYtlJ6gYUeJvpdLd64O6MvoT"
@@ -22,14 +14,15 @@ class DataInfo:
     def __init__(self):
         # Création de la fenêtre
         self.root = tk.Tk()
-        self.root.title("Tableau d'informations")
+        self.root.title("Data-Info")
 
         # Style du thème vapor de ttkbootstrap
         self.style = Tkb.Style("vapor")
+        self.style.theme_use("vapor")
 
         # Création du tableau avec le style du thème vapor
         self.table = ttk.Treeview(self.root, columns=[
-            "N°", "Title", "Size", "Duration", "Completed"], show="headings", style="Treeview")
+            "N°", "Title", "Size", "Duration", "Completed"], show="headings")
 
         # Affichage des en-têtes
         self.table.heading("N°", text="N°")
@@ -39,6 +32,9 @@ class DataInfo:
         self.table.heading("Completed", text="Completed")
 
         # Affichage du tableau
+        for column in ["N°", "Title", "Size", "Duration", "Completed"]:
+            self.table.column(column, anchor="center")
+
         self.table.pack(expand=True, fill=tk.BOTH)
 
     @ staticmethod
@@ -52,6 +48,30 @@ class DataInfo:
 
         # Récupère les informations de la vidéo
         number = 0
+        title = YouTube(url).title
+        duration = YouTube(url).length
+        duration = DataInfo.convert_duration(duration)
+        size = object_dl.filesize if object_dl.filesize else "Calculation in progress.."
+
+        # Convertit la taille du fichier en Mo
+        size_mb = f"{round(size / (1024 * 1024), 2)} Mo"
+        # == object_dl.filesize_approx à voir
+        Completed = "Completed." if object_dl.filesize else "Loading..."
+        data = {
+            "N°": number,
+            "Title": title,
+            "Size": size_mb,
+            "Duration": duration,
+            "Completed": Completed
+        }
+        return data
+
+    @staticmethod
+    def collect_playlist_url_data_pattern(object_dl, url, n):
+        object_dl.download()
+
+        # Récupère les informations de la vidéo
+        number = n
         title = YouTube(url).title
         duration = YouTube(url).length
         duration = DataInfo.convert_duration(duration)
@@ -105,3 +125,6 @@ class DataInfo:
         item = DataInfo.get_video_data_from_single_url(url)
         print(item)
         self.insert_single_url_data_pattern(item)
+
+    def run(self):
+        self.root.mainloop()
