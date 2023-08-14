@@ -9,7 +9,7 @@ packages = [{include = "youtube_playlist_downloader_v2"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 tk = "^0.1.0"
-pytube = "^15.0.0"
+pytube = "15.0.0"
 ttkbootstrap = "^1.10.1"
 pillow = "^10.0.0"
 tqdm = "^4.65.2"

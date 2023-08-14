@@ -80,7 +80,7 @@ class DataInfo:
         # Convertit la taille du fichier en Mo
         size_mb = f"{round(size / (1024 * 1024), 2)} Mo"
         # == object_dl.filesize_approx à voir
-        Completed = "Completed." if object_dl.filesize else "Loading..."
+        Completed = "Completed." if object_dl.filesize else "Problem encountered..."
         data = {
             "N°": number,
             "Title": title,
