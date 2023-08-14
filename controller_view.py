@@ -1,4 +1,5 @@
 from tkinter import Tk, Canvas, Entry, Button, PhotoImage
+import tkinter as tk
 from pathlib import Path
 from model import YoutubeDlModel
 
@@ -42,17 +43,15 @@ class YoutubeDlGui:
 
         self.entry_image_1 = PhotoImage(
             file=self.relative_to_assets("audio_entry_1.png"))
+
         self.entry_bg_1 = self.canvas.create_image(
             249.5,
             485.5,
             image=self.entry_image_1
         )
-        self.entry_1 = Entry(
-            bd=0,
-            bg="#bbbebc",
-            fg="#000000",
-            highlightthickness=0
-        )
+        self.entry_1 = PlaceholderEntry(self.window,
+                                        placeholder='CTRL + V your link here')
+
         self.entry_1.place(
             x=130.0,
             y=476.0,
@@ -158,3 +157,32 @@ class YoutubeDlGui:
     def run(self):
         self.window.resizable(False, False)
         self.window.mainloop()
+
+
+class PlaceholderEntry(Entry):
+    def __init__(self, master=None, placeholder='', cnf={}, fg='black',
+                 fg_placeholder='black', *args, **kw):
+        super().__init__(master=None, cnf={
+            'bd': 0, 'justify': 'center'}, bg='#bbbebc', *args, **kw)
+        self.fg = fg
+        self.fg_placeholder = fg_placeholder
+        self.placeholder = placeholder
+        self.bind('<FocusOut>', lambda event: self.fill_placeholder())
+        self.bind('<FocusIn>', lambda event: self.clear_box())
+        self.fill_placeholder()
+
+    def clear_box(self):
+        if not self.get() and super().get():
+            self.config(fg=self.fg)
+            self.delete(0, tk.END)
+
+    def fill_placeholder(self):
+        if not super().get():
+            self.config(fg=self.fg_placeholder)
+            self.insert(0, self.placeholder)
+
+    def get(self):
+        content = super().get()
+        if content == self.placeholder:
+            return ''
+        return content
