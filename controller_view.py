@@ -115,15 +115,15 @@ class YoutubeDlGui:
 
     def button_1_callback(self):
         if self.current_button_3_state == self.audio:
-            return YoutubeDlModel.select_path_and_download_audio(self.entry_1.get())
+            return YoutubeDlModel.select_path_and_download_audio_or_video(self.entry_1.get(), self.current_button_3_state)
         else:
-            return YoutubeDlModel.select_path_and_download_video(self.entry_1.get())
+            return YoutubeDlModel.select_path_and_download_audio_or_video(self.entry_1.get(), self.current_button_3_state)
 
     def button_2_callback(self):
         if self.current_button_3_state == self.audio:
-            return YoutubeDlModel.download_from_list_audio()
+            return YoutubeDlModel.download_from_list_audio_or_video(self.current_button_3_state)
         else:
-            return YoutubeDlModel.download_from_list_video()
+            return YoutubeDlModel.download_from_list_audio_or_video(self.current_button_3_state)
 
     def button_3_callback(self):
         if self.current_button_3_state == self.audio:

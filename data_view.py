@@ -91,9 +91,15 @@ class DataInfo:
         return data
 
     @ staticmethod
-    def get_audio_data_from_single_url(url):
+    def get_audio_or_video_data_from_single_url(url, choice):
 
-        object_dl = YouTube(url).streams.get_audio_only()
+        if choice == 'audio':
+            object_dl = YouTube(url).streams.filter(
+                only_audio=True).first()
+        elif choice == 'video':
+            object_dl = YouTube(url).streams.filter(
+                progressive=True, file_extension='mp4').order_by('resolution').desc().first()
+
         item = DataInfo.collect_single_url_data_pattern(object_dl, url)
         return item
 
@@ -108,23 +114,10 @@ class DataInfo:
         # Lancement de la fenêtre principale tkinter
         self.root.mainloop()
 
-    def add_single_audio_data_in_table(self, url):
-        item = DataInfo.get_audio_data_from_single_url(url)
+    def add_single_audio_or_video_data_in_table(self, url, choice):
+        item = DataInfo.get_audio_or_video_data_from_single_url(url, choice)
         print(item)
-        self.insert_single_url_data_pattern(item)
-
-    @ staticmethod
-    def get_video_data_from_single_url(url):
-
-        object_dl = YouTube(url).streams.filter(progressive=True).order_by(
-            'resolution').desc().first()
-        item = DataInfo.collect_single_url_data_pattern(object_dl, url)
-        return item
-
-    def add_single_video_data_in_table(self, url):
-        item = DataInfo.get_video_data_from_single_url(url)
-        print(item)
-        self.insert_single_url_data_pattern(item)
+        self.insert_single_url_data_pattern(item,)
 
     def run(self):
         self.root.mainloop()
