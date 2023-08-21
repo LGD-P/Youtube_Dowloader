@@ -9,7 +9,7 @@ class YoutubeDlModel:
 
     @staticmethod
     def choose_audio_or_video(choice, element):
-        """Will choose approriate method to download audio or video
+        """Will choose appropriate method to download audio or video
         """
         if choice == 'audio':
             return YouTube(element).streams.filter(only_audio=True).first()
@@ -19,7 +19,7 @@ class YoutubeDlModel:
     @staticmethod
     def download_audio_or_video(link, output_path, choice):
         """
-        Choose the right patter to download Youtube Playlist or single Url
+        Choose the right pattern to download Youtube Playlist or single Url
         """
 
         if YoutubeDlModel.PLAYLIST_TAG in link:
@@ -59,7 +59,7 @@ class YoutubeDlModel:
     @staticmethod
     def download_audio_or_video_from_text_list(link, output_path, choice):
         """
-        Will choose approriate method to download audio or video from a list.txt
+        From a list.txt will choose appropriate method to download audio or video 
         """
         datas = []
 
@@ -89,7 +89,7 @@ class YoutubeDlModel:
 
     @staticmethod
     def insert_data_from_text_list(datas):
-        """Use DataInfo class to collect and insert data in a table after 
+        """Use DataInfo method to collect and insert data in a table after
         download
         """
         dl = DataInfo()
@@ -106,8 +106,8 @@ class YoutubeDlModel:
 
     @staticmethod
     def select_path_to_download_audio_or_video(link, choice):
-        """This function allows the user to select a path
-        from explorer then download Youtube link to
+        """This method allows the user to select a path
+        from explorer then download Youtube link to the
         chosen path.
          """
         path = filedialog.askdirectory()
@@ -116,9 +116,8 @@ class YoutubeDlModel:
 
     @ staticmethod
     def download_from_text_list_audio_or_video(choice):
-        """This function allows the user to download
-        audio.mp4 from a list of link register in
-        text document.
+        """This method allows the user to download
+        audio.mp4 or video.mp4 from a list.txt 
         """
         path = filedialog.askopenfilename()
         first_list = []
