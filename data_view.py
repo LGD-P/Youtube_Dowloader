@@ -12,26 +12,26 @@ PLAYLIST = "https://www.youtube.com/playlist?list=PL-tdP6nrpQYtlJ6gYUeJvpdLd64O6
 class DataInfo:
 
     def __init__(self):
-        # Création de la fenêtre
+        # Crreate window
         self.root = tk.Tk()
         self.root.title("Data-Info")
 
-        # Style du thème vapor de ttkbootstrap
+        # Style theme
         self.style = Tkb.Style("vapor")
         self.style.theme_use("vapor")
 
-        # Création du tableau avec le style du thème vapor
+        # Table created -  style vapor  doesn't work
         self.table = ttk.Treeview(self.root, columns=[
             "N°", "Title", "Size", "Duration", "Completed"], show="headings")
 
-        # Affichage des en-têtes
+        # Headers
         self.table.heading("N°", text="N°")
         self.table.heading("Title", text="Title")
         self.table.heading("Size", text="Size")
         self.table.heading("Duration", text="Duration")
         self.table.heading("Completed", text="Completed")
 
-        # Affichage du tableau
+        # Display table
         for column in ["N°", "Title", "Size", "Duration", "Completed"]:
             self.table.column(column, anchor="center")
 
@@ -43,44 +43,19 @@ class DataInfo:
         seconds = dur_in_sec % 60
         return f"{minutes} min {seconds} sec"
 
-    def collect_single_url_data_pattern(object_dl, url):
+    def collect_url_data_pattern(object_dl, url, number):
         object_dl.download()
 
-        # Récupère les informations de la vidéo
-        number = 0
+        # Get video data
         title = YouTube(url).title
         duration = YouTube(url).length
         duration = DataInfo.convert_duration(duration)
         size = object_dl.filesize if object_dl.filesize else "Calculation in progress.."
 
-        # Convertit la taille du fichier en Mo
+        # Convert size in Mo
         size_mb = f"{round(size / (1024 * 1024), 2)} Mo"
-        # == object_dl.filesize_approx à voir
+
         Completed = "Completed." if object_dl.filesize else "Loading..."
-        data = {
-            "N°": number,
-            "Title": title,
-            "Size": size_mb,
-            "Duration": duration,
-            "Completed": Completed
-        }
-        return data
-
-    @staticmethod
-    def collect_playlist_url_data_pattern(object_dl, url, n):
-        object_dl.download()
-
-        # Récupère les informations de la vidéo
-        number = n
-        title = YouTube(url).title
-        duration = YouTube(url).length
-        duration = DataInfo.convert_duration(duration)
-        size = object_dl.filesize if object_dl.filesize else "Calculation in progress.."
-
-        # Convertit la taille du fichier en Mo
-        size_mb = f"{round(size / (1024 * 1024), 2)} Mo"
-        # == object_dl.filesize_approx à voir
-        Completed = "Completed." if object_dl.filesize else "Problem encountered..."
         data = {
             "N°": number,
             "Title": title,
@@ -92,6 +67,8 @@ class DataInfo:
 
     @ staticmethod
     def get_audio_or_video_data_from_single_url(url, choice):
+        """This method adapte collecting process from a video or a audio choice
+        """
 
         if choice == 'audio':
             object_dl = YouTube(url).streams.filter(
@@ -100,24 +77,21 @@ class DataInfo:
             object_dl = YouTube(url).streams.filter(
                 progressive=True, file_extension='mp4').order_by('resolution').desc().first()
 
-        item = DataInfo.collect_single_url_data_pattern(object_dl, url)
+        item = DataInfo.collect_url_data_pattern(object_dl, url, 1)
         return item
 
     def insert_single_url_data_pattern(self, item):
         self.table.insert("", "end", values=(
             item["N°"], item["Title"], item["Size"],
             item["Duration"], item["Completed"]))
-        # Actualisation de la fenêtre à chaque ajout d'une ligne
+        # Refresh data in table
         self.root.update()
         time.sleep(2)
 
-        # Lancement de la fenêtre principale tkinter
+        # Running main loop
         self.root.mainloop()
 
     def add_single_audio_or_video_data_in_table(self, url, choice):
         item = DataInfo.get_audio_or_video_data_from_single_url(url, choice)
         print(item)
         self.insert_single_url_data_pattern(item,)
-
-    def run(self):
-        self.root.mainloop()
