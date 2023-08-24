@@ -8,11 +8,12 @@ class YoutubeDlModel:
     PLAYLIST_TAG = "https://www.youtube.com/playlist?list="
 
     @staticmethod
-    def choose_audio_or_video(choice, element):
+    def choose_audio_or_video(choice, output_path, element):
         """Will choose appropriate method to download audio or video
         """
         if choice == 'audio':
             return YouTube(element).streams.filter(only_audio=True).first()
+
         elif choice == 'video':
             return YouTube(element).streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
 
@@ -33,9 +34,13 @@ class YoutubeDlModel:
             datas = []
             for element in urls:
                 index += 1
+                object_dl = YoutubeDlModel.choose_audio_or_video(
+                    choice, output_path, element)
+
                 element_to_append = DataInfo.collect_url_data_pattern(
-                    YoutubeDlModel.choose_audio_or_video(choice, element), element, index)
+                    object_dl, output_path, element, index)
                 datas.append(element_to_append)
+                print(element_to_append)
 
             print(datas)
             dl = DataInfo()
@@ -54,7 +59,8 @@ class YoutubeDlModel:
             print(f"{choice}: It's a simple link")
             print(link)
             dl = DataInfo()
-            dl.add_single_audio_or_video_data_in_table(link, choice)
+            dl.add_single_audio_or_video_data_in_table(
+                link, output_path, choice)
 
     @staticmethod
     def download_audio_or_video_from_text_list(link, output_path, choice):
@@ -73,15 +79,19 @@ class YoutubeDlModel:
 
             for element in urls:
                 index += 1
+                object_dl = YoutubeDlModel.choose_audio_or_video(
+                    choice, output_path, element)
+
                 element_to_append = DataInfo.collect_url_data_pattern(
-                    YoutubeDlModel.choose_audio_or_video(choice, element), element, index)
+                    object_dl, output_path, element, index)
+
                 datas.append(element_to_append)
 
         else:
             print(f"{choice}: It's a simple link")
             print(link)
             datas.append(
-                DataInfo.get_audio_or_video_data_from_single_url(link, choice))
+                DataInfo.get_audio_or_video_data_from_single_url(link, output_path, choice))
 
         print("DATA APRES TELECHARGEMENT", datas)
 
@@ -110,9 +120,10 @@ class YoutubeDlModel:
         from explorer then download Youtube link to the
         chosen path.
          """
-        path = filedialog.askdirectory()
+        output_path = filedialog.askdirectory()
 
-        YoutubeDlModel.download_audio_or_video(link, path, choice)
+        YoutubeDlModel.download_audio_or_video(
+            link, output_path, choice)
 
     @ staticmethod
     def download_from_text_list_audio_or_video(choice):

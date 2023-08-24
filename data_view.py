@@ -43,17 +43,17 @@ class DataInfo:
         seconds = dur_in_sec % 60
         return f"{minutes} min {seconds} sec"
 
-    def collect_url_data_pattern(object_dl, url, number):
-        object_dl.download()
+    def collect_url_data_pattern(object_dl, output_path, url, number):
+
+        object_dl.download(output_path)
 
         # Get video data
         title = YouTube(url).title
         duration = YouTube(url).length
         duration = DataInfo.convert_duration(duration)
-        size = object_dl.filesize if object_dl.filesize else "Calculation in progress.."
 
         # Convert size in Mo
-        size_mb = f"{round(size / (1024 * 1024), 2)} Mo"
+        size_mb = f"{round(object_dl.filesize / (1024 * 1024), 2)} Mo"
 
         Completed = "Completed." if object_dl.filesize else "Loading..."
         data = {
@@ -66,7 +66,7 @@ class DataInfo:
         return data
 
     @ staticmethod
-    def get_audio_or_video_data_from_single_url(url, choice):
+    def get_audio_or_video_data_from_single_url(url, output_path, choice):
         """This method adapte collecting process from a video or a audio choice
         """
 
@@ -77,7 +77,8 @@ class DataInfo:
             object_dl = YouTube(url).streams.filter(
                 progressive=True, file_extension='mp4').order_by('resolution').desc().first()
 
-        item = DataInfo.collect_url_data_pattern(object_dl, url, 1)
+        item = DataInfo.collect_url_data_pattern(
+            object_dl, output_path, url, 1)
         return item
 
     def insert_single_url_data_pattern(self, item):
@@ -91,7 +92,8 @@ class DataInfo:
         # Running main loop
         self.root.mainloop()
 
-    def add_single_audio_or_video_data_in_table(self, url, choice):
-        item = DataInfo.get_audio_or_video_data_from_single_url(url, choice)
+    def add_single_audio_or_video_data_in_table(self, url, output_path, choice):
+        item = DataInfo.get_audio_or_video_data_from_single_url(
+            url, output_path, choice)
         print(item)
         self.insert_single_url_data_pattern(item,)
