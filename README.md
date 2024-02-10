@@ -1,6 +1,7 @@
 # Youtube download V2
+ - Thanks to pytube community ! ==> https://github.com/pytube/pytube 
 
-_This project is an improvment of an older, one Youtube_Playlist_Downloader_
+_This project is an improvement of an older, one Youtube_Playlist_Downloader_
 
 - Download Youtube audio or video:
   - from unique url
@@ -59,6 +60,36 @@ _This project is an improvment of an older, one Youtube_Playlist_Downloader_
 
     poetry install
 
-### Run project:
+### Run project in you IDE:
 
     python main.py
+
+### Run the project with powershell : 
+
+*just create a run.ps1 file*
+
+```Powershell
+cd "Path-to-your-dir-app"
+poetry run python main.py
+```
+- *a simple right click & execute with powershell will run it*
+
+### Run the project with batch command :
+
+- *Just create a run.txt file*
+
+```batch
+@echo off
+set "APP_DIR=Path-to-your-dir-app"
+cd /d %APP_DIR%
+start /min cmd /k "poetry run python main.py"
+```
+- *and then save it as run.bat and double click to run*
+
+
+
+### You can auto-py-to-exe this project:
+
+- *Prefer requirement.txt and pip env than pyproject.toml and poetry to compile*
+- *Don't forget to add assets folder and additional files*
+
