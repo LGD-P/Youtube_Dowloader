@@ -22,6 +22,8 @@ class YoutubeDlModel:
         """
         Choose the right pattern to download Youtube Playlist or single Url
         """
+        if not link: # Avoid DataInfo to appear
+            return False
 
         if YoutubeDlModel.PLAYLIST_TAG in link:
             print(f"{choice}:It's a playlist:")
