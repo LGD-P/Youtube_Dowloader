@@ -2,6 +2,7 @@ from pytube import Playlist, YouTube
 from tkinter import filedialog
 import time
 from data_view import DataInfo
+from progressbar import ProgressBar
 
 
 class YoutubeDlModel:
@@ -12,7 +13,7 @@ class YoutubeDlModel:
         """Will choose appropriate method to download audio or video
         """
         if choice == 'audio':
-            return YouTube(element).streams.filter(only_audio=True).first()
+            return  YouTube(element).streams.filter(only_audio=True).first()
 
         elif choice == 'video':
             return YouTube(element).streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
@@ -128,7 +129,7 @@ class YoutubeDlModel:
             link, output_path, choice)
 
     @ staticmethod
-    def download_from_text_list_audio_or_video(choice):
+    def read_txt_file_and_download(choice):
         """This method allows the user to download
         audio.mp4 or video.mp4 from a list.txt 
         """

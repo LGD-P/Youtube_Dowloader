@@ -17,6 +17,7 @@ class YoutubeDlGui:
         self.assets_video_path = self.output_path / Path("assets/frame0/video")
 
         self.window = Tk()
+        self.window.title("Youtube DL")
         self.window.geometry("512x512")
         self.window.configure(bg="#FFFFFF")
         self.icon_path = "assets/frame0/icon.ico"
@@ -122,9 +123,9 @@ class YoutubeDlGui:
 
     def button_2_callback(self):
         if self.current_button_3_state == self.audio:
-            return YoutubeDlModel.download_from_text_list_audio_or_video(self.current_button_3_state)
+            return YoutubeDlModel.read_txt_file_and_download(self.current_button_3_state)
         else:
-            return YoutubeDlModel.download_from_text_list_audio_or_video(self.current_button_3_state)
+            return YoutubeDlModel.read_txt_file_and_download(self.current_button_3_state)
 
     def button_3_callback(self):
         if self.current_button_3_state == self.audio:

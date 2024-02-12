@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-import ttkbootstrap as Tkb
+# import ttkbootstrap as Tkb
 import time
 from pytube import YouTube
 
@@ -12,15 +12,10 @@ PLAYLIST = "https://www.youtube.com/playlist?list=PL-tdP6nrpQYtlJ6gYUeJvpdLd64O6
 class DataInfo:
 
     def __init__(self):
-        # Crreate window
+        # Create window
         self.root = tk.Tk()
         self.root.title("Data-Info")
 
-        # Style theme
-        self.style = Tkb.Style("vapor")
-        self.style.theme_use("vapor")
-
-        # Table created -  style vapor  doesn't work
         self.table = ttk.Treeview(self.root, columns=[
             "N°", "Title", "Size", "Duration", "Completed"], show="headings")
 
@@ -44,6 +39,7 @@ class DataInfo:
         return f"{minutes} min {seconds} sec"
 
     def collect_url_data_pattern(object_dl, output_path, url, number):
+        """Collect and return data such as title, duration, size and completion status."""
 
         object_dl.download(output_path)
 
@@ -69,7 +65,6 @@ class DataInfo:
     def get_audio_or_video_data_from_single_url(url, output_path, choice):
         """This method adapte collecting process from a video or a audio choice
         """
-
         if choice == 'audio':
             object_dl = YouTube(url).streams.filter(
                 only_audio=True).first()
