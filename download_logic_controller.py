@@ -6,7 +6,7 @@ import os
 
 from pytube.exceptions import PytubeError
 
-from data_view import DataInfo
+from data_gui_controller import DataInfo
 
 
 class YoutubeDlModel:
