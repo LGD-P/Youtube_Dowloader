@@ -82,7 +82,6 @@ class DataInfo:
             item["Duration"], item["Completed"]))
         # Refresh data in table
         self.root.update()
-        time.sleep(2)
 
         # Running main loop
         self.root.mainloop()

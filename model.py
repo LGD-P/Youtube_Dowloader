@@ -1,12 +1,17 @@
 from pytube import Playlist, YouTube
 from tkinter import filedialog
 import time
+import os
 from data_view import DataInfo
-from progressbar import ProgressBar
 
 
 class YoutubeDlModel:
     PLAYLIST_TAG = "https://www.youtube.com/playlist?list="
+
+    @staticmethod
+    def open_download_folder(output_path):
+        "Open downloading folder & allow user to check progress"
+        os.startfile(output_path)
 
     @staticmethod
     def choose_audio_or_video(choice, output_path, element):
@@ -23,6 +28,7 @@ class YoutubeDlModel:
         """
         Choose the right pattern to download Youtube Playlist or single Url
         """
+
         if not link: # Avoid DataInfo to appear
             return False
 
@@ -48,6 +54,7 @@ class YoutubeDlModel:
             print(datas)
             dl = DataInfo()
 
+
             index = 0
             for item in datas:
                 print("Starting loop")
@@ -62,6 +69,7 @@ class YoutubeDlModel:
             print(f"{choice}: It's a simple link")
             print(link)
             dl = DataInfo()
+
             dl.add_single_audio_or_video_data_in_table(
                 link, output_path, choice)
 
@@ -124,9 +132,10 @@ class YoutubeDlModel:
         chosen path.
          """
         output_path = filedialog.askdirectory()
-
+        YoutubeDlModel.open_download_folder(output_path)
         YoutubeDlModel.download_audio_or_video(
             link, output_path, choice)
+
 
     @ staticmethod
     def read_txt_file_and_download(choice):
@@ -141,6 +150,7 @@ class YoutubeDlModel:
                 filtered_list = list(filter(None, first_list))
 
             output_path = filedialog.askdirectory()
+            YoutubeDlModel.open_download_folder(output_path)
             datas = []
             for link in filtered_list:
                 datas.append(YoutubeDlModel.download_audio_or_video_from_text_list(
