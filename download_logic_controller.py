@@ -1,7 +1,11 @@
+import tkinter as tk
 from pytube import Playlist, YouTube
 from tkinter import filedialog
 import time
 import os
+
+from pytube.exceptions import PytubeError
+
 from data_view import DataInfo
 
 
@@ -13,49 +17,55 @@ class YoutubeDlModel:
         "Open downloading folder & allow user to check progress"
         os.startfile(output_path)
 
+
     @staticmethod
     def choose_audio_or_video(choice, output_path, element):
         """Will choose appropriate method to download audio or video
         """
+
         if choice == 'audio':
-            return  YouTube(element).streams.filter(only_audio=True).first()
+            return YouTube(element).streams.filter(only_audio=True).first()
 
         elif choice == 'video':
-            return YouTube(element).streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
+            return YouTube(element).streams.filter(progressive=True, file_extension='mp4').order_by(
+                'resolution').desc().first()
+
+    @staticmethod
+    def extract_data_from_youtube_playlist(link, output_path, choice):
+        """Extract and return data from a simple url"""
+        print(f"{choice}:It's a playlist:")
+        print(link)
+        index = 0
+        urls = []
+        for audio in Playlist(link).videos:
+            urls.append(audio.watch_url)
+
+        datas = []
+        for element in urls:
+            index += 1
+            object_dl = YoutubeDlModel.choose_audio_or_video(
+                choice, output_path, element)
+
+            element_to_append = DataInfo.collect_url_data_pattern(
+                object_dl, output_path, element, index)
+            datas.append(element_to_append)
+            print(element_to_append)
+
+        print(datas)
+        return datas
 
     @staticmethod
     def download_audio_or_video(link, output_path, choice):
         """
         Choose the right pattern to download Youtube Playlist or single Url
         """
-
         if not link: # Avoid DataInfo to appear
             return False
 
         if YoutubeDlModel.PLAYLIST_TAG in link:
-            print(f"{choice}:It's a playlist:")
-            print(link)
+            datas = YoutubeDlModel.extract_data_from_youtube_playlist(link, output_path, choice)
             index = 0
-            urls = []
-            for audio in Playlist(link).videos:
-                urls.append(audio.watch_url)
-
-            datas = []
-            for element in urls:
-                index += 1
-                object_dl = YoutubeDlModel.choose_audio_or_video(
-                    choice, output_path, element)
-
-                element_to_append = DataInfo.collect_url_data_pattern(
-                    object_dl, output_path, element, index)
-                datas.append(element_to_append)
-                print(element_to_append)
-
-            print(datas)
             dl = DataInfo()
-
-
-            index = 0
             for item in datas:
                 print("Starting loop")
                 index += 1
@@ -68,35 +78,22 @@ class YoutubeDlModel:
         else:
             print(f"{choice}: It's a simple link")
             print(link)
-            dl = DataInfo()
 
-            dl.add_single_audio_or_video_data_in_table(
-                link, output_path, choice)
+            dl = DataInfo()
+            dl.add_single_audio_or_video_data_in_table(link, output_path, choice)
+
+
 
     @staticmethod
-    def download_audio_or_video_from_text_list(link, output_path, choice):
+    def extract_data_from_text_list(link, output_path, choice):
         """
-        From a list.txt will choose appropriate method to download audio or video 
+        From a list.txt will choose appropriate method to extract data
         """
         datas = []
 
         if YoutubeDlModel.PLAYLIST_TAG in link:
-            print(f"{choice}:It's a playlist:")
-            print(link)
-            index = 0
-            urls = []
-            for audio in Playlist(link).videos:
-                urls.append(audio.watch_url)
-
-            for element in urls:
-                index += 1
-                object_dl = YoutubeDlModel.choose_audio_or_video(
-                    choice, output_path, element)
-
-                element_to_append = DataInfo.collect_url_data_pattern(
-                    object_dl, output_path, element, index)
-
-                datas.append(element_to_append)
+            if YoutubeDlModel.PLAYLIST_TAG in link:
+                datas = YoutubeDlModel.extract_data_from_youtube_playlist(link, output_path, choice)
 
         else:
             print(f"{choice}: It's a simple link")
@@ -133,8 +130,10 @@ class YoutubeDlModel:
          """
         output_path = filedialog.askdirectory()
         YoutubeDlModel.open_download_folder(output_path)
+
         YoutubeDlModel.download_audio_or_video(
             link, output_path, choice)
+
 
 
     @ staticmethod
@@ -153,7 +152,7 @@ class YoutubeDlModel:
             YoutubeDlModel.open_download_folder(output_path)
             datas = []
             for link in filtered_list:
-                datas.append(YoutubeDlModel.download_audio_or_video_from_text_list(
+                datas.append(YoutubeDlModel.extract_data_from_text_list(
                     link, output_path, choice))
 
             print("DATA BEFORE SORTING", datas)

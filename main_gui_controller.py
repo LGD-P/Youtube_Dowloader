@@ -115,19 +115,15 @@ class YoutubeDlGui:
         return self.assets_path / Path(path)
 
     def button_1_callback(self):
-
-        if self.current_button_3_state == self.audio:
-            return YoutubeDlModel.select_path_to_download_audio_or_video(self.entry_1.get(), self.current_button_3_state)
-        else:
-            return YoutubeDlModel.select_path_to_download_audio_or_video(self.entry_1.get(), self.current_button_3_state)
+        """Allaws user to download from a simple link regarding audio or video choice"""
+        return YoutubeDlModel.select_path_to_download_audio_or_video(self.entry_1.get(), self.current_button_3_state)
 
     def button_2_callback(self):
-        if self.current_button_3_state == self.audio:
-            return YoutubeDlModel.read_txt_file_and_download(self.current_button_3_state)
-        else:
-            return YoutubeDlModel.read_txt_file_and_download(self.current_button_3_state)
+        """Download audio or video from a txt list"""
+        return YoutubeDlModel.read_txt_file_and_download(self.current_button_3_state)
 
     def button_3_callback(self):
+        """Allaws user to switch app states to download audio or video"""
         if self.current_button_3_state == self.audio:
             self.assets_path = self.output_path / Path("assets/frame0/video")
             self.current_button_3_state = self.video
