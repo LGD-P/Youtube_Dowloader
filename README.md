@@ -25,8 +25,8 @@ _This project is an improvement of an older, one Youtube_Playlist_Downloader_
 
 
 <p align='center'>
-    <img src="assets\frame0\audio_look.png" width=250 >
-    <img src="assets\frame0\video_look.png" width=250>
+    <img src="assets\frame0\audio_look.png" width=300>
+    <img src="assets\frame0\video_look.png" width=300>
 </p>
 
 ## New features:
