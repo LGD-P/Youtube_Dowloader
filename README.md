@@ -23,14 +23,6 @@ _This project is an improvement of an older, one Youtube_Playlist_Downloader_
 - Complete graphic redesign.
 - Thanks to ==> https://github.com/ParthJadhav/Tkinter-Designer, which greatly simplified my life for placing the elements of my app. A project to visit and test without hesitation !!!\*
 
-<h3 align=center>Before<h3>
-
-<p align='center'>
-    <img src="assets\frame0\old_project.png" width=250>
-    
-</p>
-
-<h3 align=center>After<h3>
 
 <p align='center'>
     <img src="assets\frame0\audio_look.png" width=250 >
