@@ -1,7 +1,7 @@
 from tkinter import Tk, Canvas, Entry, Button, PhotoImage
 import tkinter as tk
 from pathlib import Path
-from model import YoutubeDlModel
+from download_logic_controller import YoutubeDlModel
 
 
 class YoutubeDlGui:
