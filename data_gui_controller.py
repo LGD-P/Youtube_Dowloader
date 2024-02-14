@@ -1,7 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-# import ttkbootstrap as Tkb
-import time
 from pytube import YouTube
 
 
@@ -38,10 +36,9 @@ class DataInfo:
         seconds = dur_in_sec % 60
         return f"{minutes} min {seconds} sec"
 
+    @staticmethod
     def collect_url_data_pattern(object_dl, output_path, url, number):
         """Collect and return data such as title, duration, size and completion status."""
-
-        object_dl.download(output_path)
 
         # Get video data
         title = YouTube(url).title
@@ -61,22 +58,9 @@ class DataInfo:
         }
         return data
 
-    @ staticmethod
-    def get_audio_or_video_data_from_single_url(url, output_path, choice):
-        """This method adapte collecting process from a video or a audio choice
-        """
-        if choice == 'audio':
-            object_dl = YouTube(url).streams.filter(
-                only_audio=True).first()
-        elif choice == 'video':
-            object_dl = YouTube(url).streams.filter(
-                progressive=True, file_extension='mp4').order_by('resolution').desc().first()
-
-        item = DataInfo.collect_url_data_pattern(
-            object_dl, output_path, url, 1)
-        return item
 
     def insert_single_url_data_pattern(self, item):
+        """Manage data insertion in table"""
         self.table.insert("", "end", values=(
             item["N°"], item["Title"], item["Size"],
             item["Duration"], item["Completed"]))
@@ -86,8 +70,26 @@ class DataInfo:
         # Running main loop
         self.root.mainloop()
 
-    def add_single_audio_or_video_data_in_table(self, url, output_path, choice):
-        item = DataInfo.get_audio_or_video_data_from_single_url(
-            url, output_path, choice)
-        print(item)
-        self.insert_single_url_data_pattern(item,)
+    def add_single_audio_or_video_data_in_table(self, item):
+        """Insert data in table"""
+        self.insert_single_url_data_pattern(item)
+
+
+    @staticmethod
+    def insert_data_from_text_list(datas):
+        """Use DataInfo method to collect and insert data in a table after
+        download
+        """
+        dl = DataInfo()
+
+        index = 0
+        for item in datas:
+            print("Starting loop")
+            index += 1
+            dl.table.insert("", "end", values=(
+                index, item["Title"], item["Size"],
+                item["Duration"], item["Completed"]))
+            print(f"Insert N°{index} done")
+
+
+

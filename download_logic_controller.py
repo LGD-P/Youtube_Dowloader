@@ -1,11 +1,10 @@
-import tkinter as tk
 from pytube import Playlist, YouTube
 from tkinter import filedialog
-import time
 import os
 
 from pytube.exceptions import PytubeError
 
+from error_message_gui_controller import ErrorMessagePopup
 from data_gui_controller import DataInfo
 
 
@@ -18,7 +17,6 @@ class YoutubeDlModel:
         os.startfile(output_path)
 
 
-    @staticmethod
     def choose_audio_or_video(choice, output_path, element):
         """Will choose appropriate method to download audio or video
         """
@@ -43,13 +41,13 @@ class YoutubeDlModel:
         datas = []
         for element in urls:
             index += 1
+
             object_dl = YoutubeDlModel.choose_audio_or_video(
                 choice, output_path, element)
-
-            element_to_append = DataInfo.collect_url_data_pattern(
-                object_dl, output_path, element, index)
+            object_dl.download(output_path)
+            YoutubeDlModel.open_download_folder(output_path)
+            element_to_append = DataInfo.collect_url_data_pattern(object_dl, output_path, element, int(index))
             datas.append(element_to_append)
-            print(element_to_append)
 
         print(datas)
         return datas
@@ -59,28 +57,33 @@ class YoutubeDlModel:
         """
         Choose the right pattern to download Youtube Playlist or single Url
         """
+
         if not link: # Avoid DataInfo to appear
-            return False
+            return False, ErrorMessagePopup()
 
         if YoutubeDlModel.PLAYLIST_TAG in link:
-            datas = YoutubeDlModel.extract_data_from_youtube_playlist(link, output_path, choice)
-            index = 0
-            dl = DataInfo()
-            for item in datas:
-                print("Starting loop")
-                index += 1
-                time.sleep(1)
-                dl.table.insert("", "end", values=(
-                    item["N°"], item["Title"], item["Size"],
-                    item["Duration"], item["Completed"]))
-                print(f"Insert N°{index} done")
+            try:
+                datas = YoutubeDlModel.extract_data_from_youtube_playlist(link, output_path, choice)
+                print('DATA = ', datas)
+                DataInfo.insert_data_from_text_list(datas)
+            except (Exception, PytubeError) as e :
+                print(e)
+                ErrorMessagePopup()
 
         else:
             print(f"{choice}: It's a simple link")
             print(link)
+            try:
+                file = YoutubeDlModel.choose_audio_or_video(choice, output_path, link)
+                file.download(output_path)
+                YoutubeDlModel.open_download_folder(output_path)
+                info_gui = DataInfo()
+                data_collected = info_gui.collect_url_data_pattern(file,output_path,link,1)
+                info_gui.add_single_audio_or_video_data_in_table(data_collected)
 
-            dl = DataInfo()
-            dl.add_single_audio_or_video_data_in_table(link, output_path, choice)
+            except (Exception, PytubeError) as e:
+                print(e)
+                ErrorMessagePopup()
 
 
 
@@ -92,35 +95,22 @@ class YoutubeDlModel:
         datas = []
 
         if YoutubeDlModel.PLAYLIST_TAG in link:
-            if YoutubeDlModel.PLAYLIST_TAG in link:
-                datas = YoutubeDlModel.extract_data_from_youtube_playlist(link, output_path, choice)
+            datas = YoutubeDlModel.extract_data_from_youtube_playlist(link, output_path, choice)
 
         else:
             print(f"{choice}: It's a simple link")
             print(link)
-            datas.append(
-                DataInfo.get_audio_or_video_data_from_single_url(link, output_path, choice))
-
+            object_dl = YoutubeDlModel.choose_audio_or_video(choice, output_path, link)
+            try:
+                object_dl.download(output_path)
+                datas.append(DataInfo.collect_url_data_pattern(object_dl,output_path,link,1))
+            except (Exception, PytubeError) as e:
+                ErrorMessagePopup()
+                print(e)
         print("DATA APRES TELECHARGEMENT", datas)
 
         return datas
 
-    @staticmethod
-    def insert_data_from_text_list(datas):
-        """Use DataInfo method to collect and insert data in a table after
-        download
-        """
-        dl = DataInfo()
-
-        index = 0
-        for item in datas:
-            print("Starting loop")
-            index += 1
-            time.sleep(1)
-            dl.table.insert("", "end", values=(
-                index, item["Title"], item["Size"],
-                item["Duration"], item["Completed"]))
-            print(f"Insert N°{index} done")
 
     @staticmethod
     def select_path_to_download_audio_or_video(link, choice):
@@ -129,11 +119,7 @@ class YoutubeDlModel:
         chosen path.
          """
         output_path = filedialog.askdirectory()
-        YoutubeDlModel.open_download_folder(output_path)
-
-        YoutubeDlModel.download_audio_or_video(
-            link, output_path, choice)
-
+        YoutubeDlModel.download_audio_or_video( link, output_path, choice)
 
 
     @ staticmethod
@@ -149,11 +135,15 @@ class YoutubeDlModel:
                 filtered_list = list(filter(None, first_list))
 
             output_path = filedialog.askdirectory()
+
             YoutubeDlModel.open_download_folder(output_path)
             datas = []
-            for link in filtered_list:
-                datas.append(YoutubeDlModel.extract_data_from_text_list(
+            try :
+                for link in filtered_list:
+                    datas.append(YoutubeDlModel.extract_data_from_text_list(
                     link, output_path, choice))
+            except (Exception, PytubeError):
+                return ErrorMessagePopup()
 
             print("DATA BEFORE SORTING", datas)
             new_list = []
@@ -161,4 +151,5 @@ class YoutubeDlModel:
                 new_list.extend(sublist)
             datas = new_list
             print("RESULTAT AFTER SORTING", datas)
-            YoutubeDlModel.insert_data_from_text_list(datas)
+            DataInfo.insert_data_from_text_list(datas)
+
