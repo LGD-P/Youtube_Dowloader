@@ -57,23 +57,20 @@ class YoutubeDlModel:
         """
         Choose the right pattern to download Youtube Playlist or single Url
         """
+        try:
+            if not link: # Avoid DataInfo to appear
+                return False, ErrorMessagePopup()
 
-        if not link: # Avoid DataInfo to appear
-            return False, ErrorMessagePopup()
+            if YoutubeDlModel.PLAYLIST_TAG in link:
 
-        if YoutubeDlModel.PLAYLIST_TAG in link:
-            try:
                 datas = YoutubeDlModel.extract_data_from_youtube_playlist(link, output_path, choice)
                 print('DATA = ', datas)
                 DataInfo.insert_data_from_text_list(datas)
-            except (Exception, PytubeError) as e :
-                print(e)
-                ErrorMessagePopup()
 
-        else:
-            print(f"{choice}: It's a simple link")
-            print(link)
-            try:
+            else:
+                print(f"{choice}: It's a simple link")
+                print(link)
+
                 file = YoutubeDlModel.choose_audio_or_video(choice, output_path, link)
                 file.download(output_path)
                 YoutubeDlModel.open_download_folder(output_path)
@@ -81,9 +78,9 @@ class YoutubeDlModel:
                 data_collected = info_gui.collect_url_data_pattern(file,output_path,link,1)
                 info_gui.add_single_audio_or_video_data_in_table(data_collected)
 
-            except (Exception, PytubeError) as e:
-                print(e)
-                ErrorMessagePopup()
+        except (Exception, PytubeError) as e:
+            print(e)
+            ErrorMessagePopup()
 
 
 
@@ -92,24 +89,26 @@ class YoutubeDlModel:
         """
         From a list.txt will choose appropriate method to extract data
         """
-        datas = []
+        try:
+            datas = []
 
-        if YoutubeDlModel.PLAYLIST_TAG in link:
-            datas = YoutubeDlModel.extract_data_from_youtube_playlist(link, output_path, choice)
+            if YoutubeDlModel.PLAYLIST_TAG in link:
+                datas = YoutubeDlModel.extract_data_from_youtube_playlist(link, output_path, choice)
 
-        else:
-            print(f"{choice}: It's a simple link")
-            print(link)
-            object_dl = YoutubeDlModel.choose_audio_or_video(choice, output_path, link)
-            try:
+            else:
+                print(f"{choice}: It's a simple link")
+                print(link)
+                object_dl = YoutubeDlModel.choose_audio_or_video(choice, output_path, link)
+
                 object_dl.download(output_path)
                 datas.append(DataInfo.collect_url_data_pattern(object_dl,output_path,link,1))
-            except (Exception, PytubeError) as e:
-                ErrorMessagePopup()
-                print(e)
-        print("DATA APRES TELECHARGEMENT", datas)
 
-        return datas
+            print("DATA APRES TELECHARGEMENT", datas)
+            return datas
+
+        except (Exception, PytubeError) as e:
+            ErrorMessagePopup()
+            print(e)
 
 
     @staticmethod
@@ -119,6 +118,8 @@ class YoutubeDlModel:
         chosen path.
          """
         output_path = filedialog.askdirectory()
+        if not output_path:
+            return False
         YoutubeDlModel.download_audio_or_video( link, output_path, choice)
 
 
@@ -127,29 +128,32 @@ class YoutubeDlModel:
         """This method allows the user to download
         audio.mp4 or video.mp4 from a list.txt 
         """
-        path = filedialog.askopenfilename()
-        first_list = []
-        with open(path, "r", encoding='utf-8') as f:
-            for element in f:
-                first_list.append(element.strip())
-                filtered_list = list(filter(None, first_list))
+        try:
+            path = filedialog.askopenfilename()
+            if not path:
+                return False
+            first_list = []
+            with open(path, "r", encoding='utf-8') as f:
+                for element in f:
+                    first_list.append(element.strip())
+                    filtered_list = list(filter(None, first_list))
 
-            output_path = filedialog.askdirectory()
+                output_path = filedialog.askdirectory()
 
-            YoutubeDlModel.open_download_folder(output_path)
-            datas = []
-            try :
+                YoutubeDlModel.open_download_folder(output_path)
+                datas = []
+
                 for link in filtered_list:
                     datas.append(YoutubeDlModel.extract_data_from_text_list(
                     link, output_path, choice))
-            except (Exception, PytubeError):
-                return ErrorMessagePopup()
 
-            print("DATA BEFORE SORTING", datas)
-            new_list = []
-            for sublist in datas:
-                new_list.extend(sublist)
-            datas = new_list
-            print("RESULTAT AFTER SORTING", datas)
-            DataInfo.insert_data_from_text_list(datas)
+                print("DATA BEFORE SORTING", datas)
+                new_list = []
+                for sublist in datas:
+                    new_list.extend(sublist)
+                datas = new_list
+                print("RESULTAT AFTER SORTING", datas)
+                DataInfo.insert_data_from_text_list(datas)
+        except (Exception, PytubeError):
+            return ErrorMessagePopup()
 

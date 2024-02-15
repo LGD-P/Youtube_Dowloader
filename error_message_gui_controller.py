@@ -16,7 +16,7 @@ class ErrorMessagePopup:
         self.error_window.resized_tk_image = ImageTk.PhotoImage(resized_image)
 
         frame = tk.Frame(self.error_window, bg='black')
-        frame.pack(padx=5, pady=5)
+        frame.pack(padx=5, pady=10)
 
         image_label = tk.Label(frame, image=self.error_window.resized_tk_image, bg='black')
         image_label.grid(row=0, column=0)

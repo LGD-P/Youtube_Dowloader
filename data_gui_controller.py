@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 from pytube import YouTube
 
-
 URL = "https://www.youtube.com/watch?v=L-iepu3EtyE"
 PLAYLIST = "https://www.youtube.com/playlist?list=PL-tdP6nrpQYtlJ6gYUeJvpdLd64O6MvoT"
 
@@ -11,8 +10,11 @@ class DataInfo:
 
     def __init__(self):
         # Create window
-        self.root = tk.Tk()
+        self.root = tk.Toplevel()
+        self.root.configure(background="black", bg='black')
         self.root.title("Data-Info")
+        self.icon_path = "assets/frame0/icon.ico"
+        self.root.iconbitmap(self.icon_path)
 
         self.table = ttk.Treeview(self.root, columns=[
             "N°", "Title", "Size", "Duration", "Completed"], show="headings")
@@ -27,6 +29,14 @@ class DataInfo:
         # Display table
         for column in ["N°", "Title", "Size", "Duration", "Completed"]:
             self.table.column(column, anchor="center")
+
+        # Set style for Treeview
+        style = ttk.Style()
+        style.configure("Treeview",
+                        background="black",
+                        foreground="white",
+                        fieldbackground="black")
+        style.map("Treeview", background=[('selected', 'green')])
 
         self.table.pack(expand=True, fill=tk.BOTH)
 

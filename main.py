@@ -1,4 +1,4 @@
-from controller_view import YoutubeDlGui
+from main_gui_controller import YoutubeDlGui
 
 
 def main():
