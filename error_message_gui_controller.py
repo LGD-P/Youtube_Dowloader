@@ -9,6 +9,8 @@ class ErrorMessagePopup:
         self.error_window.configure(bg='black')
         self.image_path = r"D:\Code\Julien\Youtube_Dowloader\assets\frame0\error.png"
         original_image = Image.open(self.image_path)
+        self.icon_path = "assets/frame0/icon.ico"
+        self.error_window.iconbitmap(self.icon_path)
         black_background = Image.new("RGB", original_image.size, (0, 0, 0))
         black_background.paste(original_image, (0, 0), original_image)
 
