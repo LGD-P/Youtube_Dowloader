@@ -31,8 +31,20 @@ _This project is an improvement of an older, one Youtube_Playlist_Downloader_
 
 ## New features:
 
-- Video ! ==> Possibility to switch to download audio or video.
-- Youtube lists are now supported .
+- Switch between Audio and Video downloading
+- Youtube Playlist are now supported 
+- More file format supported for your own lists : 
+    * ".txt", ".odt", ".ods", ".docx", ".xlsx"
+    * Do not give headers to your  ".ods" & ".xlsx" table 
+- Recap TreeView of file downloaded
+- Manage error
+- 
+ <p align='center'>
+    <a >
+        <img src="assets\frame0\error_message.png" width="50%"> 
+    </a>
+    
+ </p>
 
 ## Install project:
 
@@ -85,3 +97,9 @@ start /min cmd /k "poetry run python main.py"
 - *Prefer requirement.txt and pip env than pyproject.toml and poetry to compile*
 - *Don't forget to add assets folder and additional files*
 
+
+
+### Information : 
+
+
+*This application 100% free and opensource, designed to facilitate the downloading of audio or video content from YouTube. However, users must be aware that the author's rights must be considered when using this app. It is important to respect copyright laws and the terms of service of YouTube and any other platform from which content is downloaded. The author disclaims any responsibility for unauthorized or improper use of this application. Users are encouraged to use this app responsibly and legally.*
