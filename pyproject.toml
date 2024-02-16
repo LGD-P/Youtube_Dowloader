@@ -13,8 +13,14 @@ pytube = "15.0.0"
 ttkbootstrap = "^1.10.1"
 pillow = "^10.0.0"
 tqdm = "^4.65.2"
+cx-freeze = "^6.15.14"
+docx = "^0.2.4"
+odfpy = "^1.4.1"
+pandas = "^2.2.0"
+python-docx = "^1.1.0"
+pyarrow = "^15.0.0"
 
-pyinstaller = "^5.13.0"
+
 
 
 [build-system]
