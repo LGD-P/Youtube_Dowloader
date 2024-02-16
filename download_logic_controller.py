@@ -6,6 +6,7 @@ from pytube.exceptions import PytubeError
 
 from error_message_gui_controller import ErrorMessagePopup
 from data_gui_controller import DataInfo
+from file_reader_controller import read_any_file_and_return_list
 
 
 class YoutubeDlModel:
@@ -132,28 +133,31 @@ class YoutubeDlModel:
             path = filedialog.askopenfilename()
             if not path:
                 return False
-            first_list = []
-            with open(path, "r", encoding='utf-8') as f:
-                for element in f:
-                    first_list.append(element.strip())
-                    filtered_list = list(filter(None, first_list))
 
-                output_path = filedialog.askdirectory()
+            list_result = read_any_file_and_return_list(path)
 
-                YoutubeDlModel.open_download_folder(output_path)
-                datas = []
+            if type(list_result) != list:
+                ErrorMessagePopup()
+                return False
 
-                for link in filtered_list:
-                    datas.append(YoutubeDlModel.extract_data_from_text_list(
-                    link, output_path, choice))
+            output_path = filedialog.askdirectory()
 
-                print("DATA BEFORE SORTING", datas)
-                new_list = []
-                for sublist in datas:
-                    new_list.extend(sublist)
-                datas = new_list
-                print("RESULTAT AFTER SORTING", datas)
-                DataInfo.insert_data_from_text_list(datas)
+            YoutubeDlModel.open_download_folder(output_path)
+            datas = []
+
+            for link in list_result:
+                datas.append(YoutubeDlModel.extract_data_from_text_list(
+                link, output_path, choice))
+
+            print("DATA BEFORE SORTING", datas)
+            new_list = []
+            for sublist in datas:
+                new_list.extend(sublist)
+            datas = new_list
+            print("RESULTAT AFTER SORTING", datas)
+            DataInfo.insert_data_from_text_list(datas)
+
         except (Exception, PytubeError):
             return ErrorMessagePopup()
+
 
