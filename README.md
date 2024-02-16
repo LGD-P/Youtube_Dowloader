@@ -38,7 +38,7 @@ _This project is an improvement of an older, one Youtube_Playlist_Downloader_
     * Do not give headers to your  ".ods" & ".xlsx" table 
 - Recap TreeView of file downloaded
 - Manage error
-- 
+
  <p align='center'>
     <a >
         <img src="assets\frame0\error_message.png" width="50%"> 
