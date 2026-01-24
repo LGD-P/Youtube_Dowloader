@@ -1,0 +1,97 @@
+{
+ "version": "auto-py-to-exe-configuration_v1",
+ "pyinstallerOptions": [
+  {
+   "optionDest": "noconfirm",
+   "value": true
+  },
+  {
+   "optionDest": "filenames",
+   "value": "<Path-to-your-project>/main.py"
+  },
+  {
+   "optionDest": "onefile",
+   "value": false
+  },
+  {
+   "optionDest": "console",
+   "value": false
+  },
+  {
+   "optionDest": "icon_file",
+   "value": "<Path-to-your-project>/icon.ico"
+  },
+  {
+   "optionDest": "clean_build",
+   "value": false
+  },
+  {
+   "optionDest": "strip",
+   "value": false
+  },
+  {
+   "optionDest": "noupx",
+   "value": false
+  },
+  {
+   "optionDest": "disable_windowed_traceback",
+   "value": false
+  },
+  {
+   "optionDest": "uac_admin",
+   "value": false
+  },
+  {
+   "optionDest": "uac_uiaccess",
+   "value": false
+  },
+  {
+   "optionDest": "argv_emulation",
+   "value": false
+  },
+  {
+   "optionDest": "bootloader_ignore_signals",
+   "value": false
+  },
+  {
+   "optionDest": "datas",
+   "value": "<Path-to-your-project>/ffmpeg-8.0.1-full_build;ffmpeg-8.0.1-full_build/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "<Path-to-your-project>/assets;assets/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "<Path-to-your-project>/main_gui_controller.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "<Path-to-your-project>/file_reader_controller.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "<Path-to-your-project>/download_logic_controller.py;."
+  },
+  {
+   "optionDest": "datas",
+   "value": "<Path-to-your-project>/data_gui_controller.py;."
+  },
+  {
+   "optionDest": "binaries",
+   "value": "<Path-to-your-project>/ffmpeg-8.0.1-full_build/bin/ffmpeg.exe;."
+  },
+  {
+   "optionDest": "binaries",
+   "value": "<Path-to-your-project>/ffmpeg-8.0.1-full_build/bin/ffplay.exe;."
+  },
+  {
+   "optionDest": "binaries",
+   "value": "<Path-to-your-project>/ffmpeg-8.0.1-full_build/bin/ffprobe.exe;."
+  }
+ ],
+ "nonPyinstallerOptions": {
+  "increaseRecursionLimit": true,
+  "manualArguments": ""
+ }
+}

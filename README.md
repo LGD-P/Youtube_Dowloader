@@ -97,7 +97,21 @@ start /min cmd /k "python main.py"
 - *Use requirement.txt and pip env to compile*
 - *Don't forget to add assets folder, ffmpeg directory, and additional files*
 
+#### Using the provided config.json:
 
+A pre-configured `config.json` file is included in the project root. This file contains all the necessary settings for auto-py-to-exe to compile the application into a standalone executable.
+
+1. Open auto-py-to-exe.
+2. Click on "Import Config From JSON" and select the `config.json` file from the project directory.
+3. Replace all `<Path-to-your-project>` placeholders in the config with the actual absolute path to your project folder (e.g., `C:/Users/YourName/Desktop/Youtube_Dowloader`).
+4. Click "Convert .py to .exe" to build the executable.
+
+The config includes:
+- **Datas**: Includes assets, ffmpeg directory, and necessary Python files.
+- **Binaries**: Includes ffmpeg executables for audio/video processing.
+- **Options**: Set to build a folder-based executable (not onefile) with console hidden, and other optimizations.
+
+After compilation, you'll get a `main.exe` and `_internal` folder that can be packaged with Inno Setup or similar for distribution.
 
 ### Information : 
 
