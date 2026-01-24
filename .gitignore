@@ -25,6 +25,10 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+/main
+/ffmpeg-8.0.1-full_build
+.LICENCE.txt
+.main.spec
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
