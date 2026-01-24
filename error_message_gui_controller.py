@@ -1,5 +1,8 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+from pathlib import Path
+import os
+import sys
 
 class ErrorMessagePopup:
     def __init__(self):
@@ -7,9 +10,15 @@ class ErrorMessagePopup:
         self.error_window.title("Error")
         self.error_window.geometry("500x100")
         self.error_window.configure(bg='black')
-        self.image_path = r"D:\Code\Julien\Youtube_Dowloader\assets\frame0\error.png"
+        # Détecter si c'est un exe PyInstaller
+        if hasattr(sys, '_MEIPASS'):
+            self.output_path = Path(sys._MEIPASS)
+        else:
+            self.output_path = Path(__file__).parent
+        self.assets_path = os.path.join(self.output_path, "assets", "frame0")
+        self.image_path = os.path.join(self.assets_path, "error.png")
         original_image = Image.open(self.image_path)
-        self.icon_path = "assets/frame0/icon.ico"
+        self.icon_path = os.path.join(self.output_path, "assets", "frame0", "icon.ico")
         self.error_window.iconbitmap(self.icon_path)
         black_background = Image.new("RGB", original_image.size, (0, 0, 0))
         black_background.paste(original_image, (0, 0), original_image)

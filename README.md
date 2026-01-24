@@ -1,5 +1,5 @@
 # Youtube download V2
- - Thanks to pytube community ! ==> https://github.com/pytube/pytube 
+ - Thanks to yt-dlp community ! ==> https://github.com/yt-dlp/yt-dlp 
 
 _This project is an improvement of an older, one Youtube_Playlist_Downloader_
 
@@ -7,14 +7,14 @@ _This project is an improvement of an older, one Youtube_Playlist_Downloader_
   - from unique url
   - from list of url.txt
   - from Youtube playlist
-- It's running with Python 3.11 using Poetry package manager
+- It's running with Python 3.12 using pip package manager
 
 <p align='center'>
-    <a href="https://www.python.org/downloads/release/python-3110/">
+    <a href="https://www.python.org/downloads/release/python-3120/">
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original-wordmark.svg" width=40/> 
     </a>
-    <a href='https://python-poetry.org/'>
-        <img src="https://python-poetry.org/images/logo-origami.svg" width=30/>
+    <a href='https://pypi.org/project/yt-dlp/'>
+        <img src="https://pypi-camo.freetls.fastly.net/3c2758eb3b3558e44faa489e5a2eca40f4371c78/68747470733a2f2f7261772e67697468756275736572636f6e74656e742e636f6d2f79742d646c702f79742d646c702f6d61737465722f2e6769746875622f62616e6e65722e737667" width=180/>
     </a>
  </p>
 
@@ -36,7 +36,7 @@ _This project is an improvement of an older, one Youtube_Playlist_Downloader_
 - More file format supported for your own lists : 
     * ".txt", ".odt", ".ods", ".docx", ".xlsx"
     * Do not give headers to your  ".ods" & ".xlsx" table 
-- Recap TreeView of file downloaded
+- Simple confirmation message after download
 - Manage error
 
  <p align='center'>
@@ -46,25 +46,25 @@ _This project is an improvement of an older, one Youtube_Playlist_Downloader_
     
  </p>
 
+## Technical changes:
+
+- **Migration from pytube to yt-dlp with ffmpeg**: To avoid recurrent update problems and ensure better compatibility with YouTube changes, the project now uses yt-dlp as the main downloader library, combined with ffmpeg for audio/video processing. This provides more reliable downloads and supports a wider range of formats without frequent library updates.
+
+- ⚠️⚠️⚠️ **FFmpeg integration**:  <strong>ffmpeg is not included in the distribution, download the full ffmpeg build from https://ffmpeg.org/download.html, unzip it, and place the entire `ffmpeg-8.0.1-full_build` directory in the current project folder. The application will automatically detect and use it for audio conversion and video processing.</strong>⚠️⚠️⚠️
+
+- **Multilingual assets**: The assets folder contains versions of buttons and interface elements in both English and French to accommodate different users. The application automatically selects the appropriate language based on system settings or user preference.
+
 ## Install project:
 
 ### Clone project:
 
     git clone https://github.com/LGD-P/Youtube_Playlist_Downloader_V2.git
 
-### Install Poetry dependency management:
+### Install Python dependencies:
 
-    pip install poetry
+    pip install -r requirement.txt
 
-### Active virtual environnement in your project:
-
-    poetry shell
-
-### Install dependencies:
-
-    poetry install
-
-### Run project in you IDE:
+### Run project:
 
     python main.py
 
@@ -74,7 +74,7 @@ _This project is an improvement of an older, one Youtube_Playlist_Downloader_
 
 ```Powershell
 cd "Path-to-your-dir-app"
-poetry run python main.py
+python main.py
 ```
 - *a simple right click & execute with powershell will run it*
 
@@ -86,7 +86,7 @@ poetry run python main.py
 @echo off
 set "APP_DIR=Path-to-your-dir-app"
 cd /d %APP_DIR%
-start /min cmd /k "poetry run python main.py"
+start /min cmd /k "python main.py"
 ```
 - *and then save it as run.bat and double click to run*
 
@@ -94,8 +94,8 @@ start /min cmd /k "poetry run python main.py"
 
 ### You can auto-py-to-exe this project:
 
-- *Prefer requirement.txt and pip env than pyproject.toml and poetry to compile*
-- *Don't forget to add assets folder and additional files*
+- *Use requirement.txt and pip env to compile*
+- *Don't forget to add assets folder, ffmpeg directory, and additional files*
 
 
 

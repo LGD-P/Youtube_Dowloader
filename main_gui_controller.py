@@ -2,7 +2,8 @@ from tkinter import Tk, Canvas, Entry, Button, PhotoImage
 import tkinter as tk
 from pathlib import Path
 from download_logic_controller import YoutubeDlModel
-
+import os
+import sys
 
 class YoutubeDlGui:
     audio = "audio"
@@ -10,17 +11,21 @@ class YoutubeDlGui:
     current_button_3_state = audio
 
     def __init__(self):
-        self.output_path = Path(__file__).parent
+        # Détecter si c'est un exe PyInstaller
+        if hasattr(sys, '_MEIPASS2'):
+            self.output_path = Path(sys._MEIPASS2)
+        else:
+            self.output_path = Path(__file__).parent
         self.model = YoutubeDlModel()
-
-        self.assets_path = self.output_path / Path("assets/frame0/audio")
-        self.assets_video_path = self.output_path / Path("assets/frame0/video")
+        
+        self.assets_path = os.path.join(self.output_path, "assets", "frame0", "audio")
+        self.assets_video_path = os.path.join(self.output_path, "assets", "frame0", "video")
 
         self.window = Tk()
         self.window.title("Youtube DL")
         self.window.geometry("512x512")
         self.window.configure(bg="#FFFFFF")
-        self.icon_path = "assets/frame0/icon.ico"
+        self.icon_path = os.path.join(self.output_path, "assets", "frame0", "icon.ico")
         self.window.iconbitmap(self.icon_path)
 
         self.canvas = Canvas(
@@ -51,7 +56,7 @@ class YoutubeDlGui:
             image=self.entry_image_1
         )
         self.entry_1 = PlaceholderEntry(self.window,
-                                        placeholder='CTRL + V your link here')
+                                        placeholder='Lien ici :    CTRL + V')
 
         self.entry_1.place(
             x=130.0,
@@ -95,7 +100,7 @@ class YoutubeDlGui:
         self.button_image_3_state0 = PhotoImage(
             file=self.relative_to_assets(f"{self.audio}_button_3.png"))
         self.button_image_3_state1 = PhotoImage(
-            file=f"{self.assets_video_path}\{self.video}_button_3.png")
+            file=os.path.join(self.assets_video_path, f"{self.video}_button_3.png"))
 
         self.button_3 = Button(
             image=self.button_image_3_state0,

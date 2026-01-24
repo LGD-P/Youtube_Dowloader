@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
-from pytube import YouTube
+import subprocess
+import json
+import os
 
 URL = "https://www.youtube.com/watch?v=L-iepu3EtyE"
 PLAYLIST = "https://www.youtube.com/playlist?list=PL-tdP6nrpQYtlJ6gYUeJvpdLd64O6MvoT"
@@ -17,17 +19,16 @@ class DataInfo:
         self.root.iconbitmap(self.icon_path)
 
         self.table = ttk.Treeview(self.root, columns=[
-            "N°", "Title", "Size", "Duration", "Completed"], show="headings")
+            "N°", "Title", "Size", "Completed"], show="headings")
 
         # Headers
         self.table.heading("N°", text="N°")
         self.table.heading("Title", text="Title")
         self.table.heading("Size", text="Size")
-        self.table.heading("Duration", text="Duration")
         self.table.heading("Completed", text="Completed")
 
         # Display table
-        for column in ["N°", "Title", "Size", "Duration", "Completed"]:
+        for column in ["N°", "Title", "Size", "Completed"]:
             self.table.column(column, anchor="center")
 
         # Set style for Treeview
@@ -40,30 +41,35 @@ class DataInfo:
 
         self.table.pack(expand=True, fill=tk.BOTH)
 
-    @ staticmethod
-    def convert_duration(dur_in_sec):
-        minutes = dur_in_sec // 60
-        seconds = dur_in_sec % 60
-        return f"{minutes} min {seconds} sec"
-
     @staticmethod
-    def collect_url_data_pattern(object_dl, output_path, url, number):
-        """Collect and return data such as title, duration, size and completion status."""
+    def collect_url_data_pattern(file_path, output_path, url, number):
+        """Collect and return data such as title, size and completion status."""
 
-        # Get video data
-        title = YouTube(url).title
-        duration = YouTube(url).length
-        duration = DataInfo.convert_duration(duration)
+        # Get video data using yt-dlp
+        try:
+            result = subprocess.run(['yt-dlp', '--print-json', url], capture_output=True, text=True, check=True)
+            info = json.loads(result.stdout)
+            title = info.get('title', 'Unknown')
+        except Exception as e:
+            print(f"Error getting metadata: {e}")
+            title = 'Unknown'
+
+        # If title is unknown, extract from file name
+        if title == 'Unknown' and file_path:
+            title = os.path.splitext(os.path.basename(file_path))[0]
 
         # Convert size in Mo
-        size_mb = f"{round(object_dl.filesize / (1024 * 1024), 2)} Mo"
+        try:
+            size_mb = f"{round(os.path.getsize(file_path) / (1024 * 1024), 2)} Mo" if file_path else 'Unknown'
+        except Exception as e:
+            print(f"Error getting file size: {e}")
+            size_mb = 'Unknown'
 
-        Completed = "Completed." if object_dl.filesize else "Loading..."
+        Completed = "Completed." if file_path and os.path.exists(file_path) else "Loading..."
         data = {
             "N°": number,
             "Title": title,
             "Size": size_mb,
-            "Duration": duration,
             "Completed": Completed
         }
         return data
@@ -73,7 +79,7 @@ class DataInfo:
         """Manage data insertion in table"""
         self.table.insert("", "end", values=(
             item["N°"], item["Title"], item["Size"],
-            item["Duration"], item["Completed"]))
+            item["Completed"]))
         # Refresh data in table
         self.root.update()
 
@@ -98,8 +104,10 @@ class DataInfo:
             index += 1
             dl.table.insert("", "end", values=(
                 index, item["Title"], item["Size"],
-                item["Duration"], item["Completed"]))
+                item["Completed"]))
             print(f"Insert N°{index} done")
+
+        dl.root.mainloop()
 
 
 
